@@ -1,11 +1,158 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ContactWAM</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ContactWAM: From Handheld Force–Tactile Demonstrations to Contact-Predictive World Action Model</title>
+<meta name="description" content="Contact-rich manipulation requires force and tactile feedback, yet such demonstrations remain far scarcer than vision-only data.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ContactWAM: From Handheld Force–Tactile Demonstrations to Contact-Predictive World Action Model">
+<meta property="og:description" content="Contact-rich manipulation requires force and tactile feedback, yet such demonstrations remain far scarcer than vision-only data.">
+<meta property="og:image" content="static/images/og.jpg">
+<link rel="icon" type="image/svg+xml" href="static/images/favicon.svg">
+<link rel="preload" href="static/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="static/css/style.css">
+<script type="importmap">
+{"imports": {"three": "./static/js/vendor/three/build/three.module.min.js", "three/addons/": "./static/js/vendor/three/examples/jsm/"}}
+</script>
 </head>
 <body>
-  <h1>ContactWAM</h1>
-  <p>Project website coming soon.</p>
+<header class="hero">
+  <h1><span class="t-main">ContactWAM</span><span class="vh">:</span> <span class="t-sub">From Handheld Force–Tactile Demonstrations to <span class="nw">Contact-Predictive</span> World Action Model</span></h1>
+  <p class="authors">Anonymous Authors · Under double-blind review</p>
+  <div class="btns">
+    <span class="btn" aria-disabled="true" title="Coming soon"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L13 5v9.5H4z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 1.5V5h4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Paper<small>soon</small></span>
+    <a class="btn" href="#video"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z" fill="currentColor"/></svg>Video</a>
+    <span class="btn" aria-disabled="true" title="Coming soon"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5 2 8l3.5 3.5M10.5 4.5 14 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Code<small>soon</small></span>
+  </div>
+</header>
+
+<div class="wrap teaser-wrap">
+  <button class="teaser-btn" type="button" data-zoom="static/images/teaser-2400.jpg" aria-label="Enlarge teaser figure">
+    <img id="teaser" class="teaser" src="static/images/teaser-1400.jpg" srcset="static/images/teaser-1400.jpg 1400w, static/images/teaser-2400.jpg 2400w" sizes="(min-width: 1100px) 1068px, calc(100vw - 32px)" width="4459" height="1395" alt="Overview of ContactUMI and ContactWAM. Left: ContactUMI captures handheld demonstrations with force and tactile sensing, using a shared finger-rail interface for robot kinesthetic teaching and deployment. Middle: We first pretrain the video and action experts of ContactWAM on large-scale vision-only robot data, then add a dedicated contact expert and post-train the full model on a small force-tactile dataset. Given current observations, ContactWAM jointly predicts future tactile signals, wrist wrenches, video, and actions. Right: Real-world manipulation tasks and representative tactile and wrench measurements during light-bulb screwing.">
+  </button>
+</div>
+
+<section id="abstract" class="abstract wrap">
+  <h2>Abstract</h2>
+  <p>Contact-rich manipulation requires force and tactile feedback, yet such demonstrations remain far scarcer than vision-only data. UMI-style interfaces enable scalable collection, but existing force-tactile designs often compromise ergonomics to isolate wrist wrench measurements and provide only limited gripping force. We present ContactUMI, a motorized handheld interface for collecting visual-force-tactile-motion demonstrations. Motorized actuation and tactile force feedback enable bilateral interaction and high gripping force while decoupling operator input from six-axis wrist wrench sensing. To leverage abundant visual data and scarce contact data, we introduce ContactWAM, a world action model combining visual pretraining with force-tactile post-training. A dedicated contact expert jointly predicts future tactile signals and wrenches alongside video and actions, learning contact evolution beyond conditioning on current contact observations. We pretrain the video and action experts on large-scale vision-only robot data, then post-train the full model on a small force-tactile dataset without changing the visual pathway’s architecture. Across four real-world contact-rich tasks, ContactWAM outperforms vision-language-action, tactile-conditioned, and vision-only world action model baselines. Together, ContactUMI and ContactWAM offer a scalable path from multimodal demonstration collection to contact-aware manipulation.</p>
+</section>
+
+<nav class="toc" id="toc" aria-label="Sections"><div class="toc-in">
+  <a href="#video">Video</a><a href="#motivation">Motivation</a><a href="#contactumi">ContactUMI</a><a href="#data">Data</a><a href="#model">ContactWAM</a><a href="#results">Results</a>
+</div></nav>
+
+<section id="video" class="sec"><div class="wrap">
+  <div class="sec-head"><h2>Video</h2></div>
+  <figure class="main-video">
+    <div class="mv-stage"><video controls preload="none" playsinline poster="static/images/video-poster.jpg" width="1280" height="720" style="aspect-ratio:16/9" aria-label="Narrated overview video"><source src="static/videos/contactwam-video.mp4" type="video/mp4"></video><button class="mv-play" type="button" aria-label="Play narrated overview video" hidden><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button></div>
+  </figure>
+</div></section>
+
+<section id="motivation" class="sec alt"><div class="wrap">
+  <div class="sec-head"><h2>Why touch?</h2></div>
+  <blockquote class="pull">Vision tells where to go — not how hard to press.</blockquote>
+  <div class="grid split">
+    <div class="split-wall"><figure class="clip"><div class="vid"><video muted loop playsinline preload="none" data-clip="wall_scroll" data-src="static/videos/wall_scroll.mp4" poster="static/images/posters/wall_scroll.jpg" aria-label="wall scroll"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Vision-only robot data — abundant</figcaption></figure></div>
+    <div><div class="stack"><figure class="clip"><div class="vid" style="aspect-ratio:2000/560"><video muted loop playsinline preload="none" data-clip="demo_board" data-src="static/videos/demo_board.mp4" poster="static/images/posters/demo_board.jpg" aria-label="demo board"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="mini">Board</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:2000/560"><video muted loop playsinline preload="none" data-clip="demo_tape" data-src="static/videos/demo_tape.mp4" poster="static/images/posters/demo_tape.jpg" aria-label="demo tape"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="mini">Tape</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:2000/560"><video muted loop playsinline preload="none" data-clip="demo_lamp" data-src="static/videos/demo_lamp.mp4" poster="static/images/posters/demo_lamp.jpg" aria-label="demo lamp"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="mini">Lamp</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:2000/560"><video muted loop playsinline preload="none" data-clip="demo_box" data-src="static/videos/demo_box.mp4" poster="static/images/posters/demo_box.jpg" aria-label="demo box"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="mini">Box</figcaption></figure></div><p class="cap">Force-tactile robot data — scarce</p></div>
+  </div>
+  <p class="question">How can we use both?</p>
+</div></section>
+
+<section id="contactumi" class="sec stage-collect"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">COLLECT</p><h2>ContactUMI</h2></div>
+  <div class="viewer" id="gripper-viewer" data-model="static/models/gripper.glb" data-parts="static/models/gripper-parts.json" data-fallback-video="static/videos/gripper_assemble.mp4" data-fallback-poster="static/images/posters/gripper_assemble.jpg">
+    <div class="viewer-stage" id="gv-stage">
+      <div class="gv-labels" id="gv-labels" aria-hidden="true"></div>
+      <p class="gv-progress" id="gv-progress" role="status">3D viewer loads as you scroll</p>
+      <p class="gv-hint" id="gv-hint">Drag to rotate</p>
+    </div>
+    <div class="viewer-ui">
+      <div class="seg" role="group" aria-label="Gripper view">
+        <button type="button" id="gv-assembled" data-t="0">Assembled</button><button type="button" id="gv-exploded" data-t="1" class="on">Exploded</button>
+      </div>
+      <input type="range" id="gv-range" min="0" max="1" step="0.01" value="1" aria-label="Explode amount">
+      <button type="button" class="chip-btn" id="gv-labels-toggle" aria-pressed="true">Labels</button>
+      <button type="button" class="chip-btn" id="gv-reset">Reset view</button>
+    </div>
+  </div>
+  <div class="grid g3 cards">
+    <div class="card"><h4>Compact structure</h4><p>152 × 183 × 269 mm, one-hand handheld</p><figure class="clip"><div class="vid fig" style="aspect-ratio:16/9"><img src="static/images/card-compact.jpg" width="752" height="423" loading="lazy" alt="Rendered ContactUMI device annotated with its dimensions: about 152 mm wide, 183 mm deep and 269 mm tall"></div></figure></div>
+    <div class="card"><h4>Motorized gripper</h4><p>Grip force decoupled from the wrist F/T sensor</p><figure class="clip"><div class="vid fig" style="aspect-ratio:16/9"><img src="static/images/card-motor.jpg" width="600" height="338" loading="lazy" alt="Rendered ContactUMI device with the motorized gripper module circled"></div></figure></div>
+    <div class="card"><h4>Servo force feedback</h4><p>Contact force felt on the trigger</p><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="servo_feedback" data-src="static/videos/servo_feedback.mp4" poster="static/images/posters/servo_feedback.jpg" aria-label="servo feedback"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div></figure></div>
+  </div>
+  <h3>Grip force and feedback</h3>
+  <div class="grid g3 portrait"><figure class="clip"><div class="vid" style="aspect-ratio:9/16"><video muted loop playsinline preload="none" data-clip="grasp_heavy" data-src="static/videos/grasp_heavy.mp4" poster="static/images/posters/grasp_heavy.jpg" aria-label="grasp heavy"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Heavy grasp</b> Lift a heavy tool</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:9/16"><video muted loop playsinline preload="none" data-clip="grasp_cookie" data-src="static/videos/grasp_cookie.mp4" poster="static/images/posters/grasp_cookie.jpg" aria-label="grasp cookie"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Fragile grasp</b> Hold a cookie intact</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:9/16"><video muted loop playsinline preload="none" data-clip="grasp_crush" data-src="static/videos/grasp_crush.mp4" poster="static/images/posters/grasp_crush.jpg" aria-label="grasp crush"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Without feedback <span class="x">✕</span></b> Cookie crushed</figcaption></figure></div>
+</div></section>
+
+<section id="data" class="sec alt stage-collect"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">COLLECT</p><h2>Data collection with ContactUMI</h2></div>
+  <div class="grid g2"><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="collect_third" data-src="static/videos/collect_third.mp4" poster="static/images/posters/collect_third.jpg" aria-label="collect third"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Handheld collection</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:1832/1016"><video muted loop playsinline preload="none" data-clip="collect_ikviz" data-src="static/videos/collect_ikviz.mp4" poster="static/images/posters/collect_ikviz.jpg" aria-label="collect ikviz"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Real-time pose visualizer</figcaption></figure></div>
+  <h3>Synchronized vision, tactile, wrench and motion streams</h3>
+  <figure class="clip"><div class="vid" style="aspect-ratio:1920/790"><video muted loop playsinline preload="none" data-clip="collect_offline" data-src="static/videos/collect_offline.mp4" poster="static/images/posters/collect_offline.jpg" aria-label="collect offline"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>3D pose + tactile · 6-axis wrench · Top camera · Wrist camera · Tactile L · Tactile R</figcaption></figure>
+  <ol class="flow">
+    <li><b>Raw streams</b><span>cams 30 Hz · tactile · wrench 1 kHz</span></li>
+    <li><b>Time sync</b><span>resample to the camera clock</span></li>
+    <li><b>Action targets</b><span>SE(3)-relative pose + gripper width</span></li>
+    <li><b>Tactile solve</b><span>marker field → depth / shear maps</span></li>
+    <li><b>LeRobot dataset</b><span>episodes for post-training</span></li>
+  </ol>
+</div></section>
+
+<section id="model" class="sec stage-train"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">TRAIN</p><h2>ContactWAM</h2></div>
+  <div class="grid g2 chips">
+    <div class="stage-chip"><b>Post-training</b><span>+ Contact DiT on ContactUMI force-tactile data</span></div>
+    <div class="stage-chip"><b>Pre-training</b><span>Video DiT + Action DiT on vision-only robot data</span></div>
+  </div>
+  <figure class="pipeline">
+    <button class="teaser-btn" type="button" data-zoom="static/images/pipeline-1600.jpg" aria-label="Enlarge pipeline figure"><img src="static/images/pipeline-1600.jpg" width="4016" height="2117" alt="ContactWAM pipeline" loading="lazy"></button>  </figure>
+  <h3>Inputs → predictions</h3>
+  <div class="grid io"><div class="pair"><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="video_current" data-src="static/videos/video_current.mp4" poster="static/images/posters/video_current.jpg" aria-label="video current"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Current video</figcaption></figure><span class="arrow" aria-hidden="true">→</span><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="video_future" data-src="static/videos/video_future.mp4" poster="static/images/posters/video_future.jpg" aria-label="video future"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Future video</figcaption></figure></div><div class="pair"><figure class="clip"><div class="vid" style="aspect-ratio:1/1"><video muted loop playsinline preload="none" data-clip="tactile_current" data-src="static/videos/tactile_current.mp4" poster="static/images/posters/tactile_current.jpg" aria-label="tactile current"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Current tactile</figcaption></figure><span class="arrow" aria-hidden="true">→</span><figure class="clip"><div class="vid" style="aspect-ratio:1/1"><video muted loop playsinline preload="none" data-clip="tactile_future" data-src="static/videos/tactile_future.mp4" poster="static/images/posters/tactile_future.jpg" aria-label="tactile future"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Future tactile</figcaption></figure></div><div class="pair one"><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="wrench_curve_slide" data-src="static/videos/wrench_curve_slide.mp4" poster="static/images/posters/wrench_curve_slide.jpg" aria-label="wrench curve slide"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Wrench</figcaption></figure></div></div>
+  <p class="cap">Future-prediction branches are dropped at inference.</p>
+  <h3>Anticipating contact</h3>
+  <figure class="clip"><div class="vid" style="aspect-ratio:1440/600"><video muted loop playsinline preload="none" data-clip="prediction_5b" data-src="static/videos/prediction_5b.mp4" poster="static/images/posters/prediction_5b.jpg" aria-label="prediction 5b"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Held-out demonstration: observation now vs. offline prediction at +1.07 s</figcaption></figure>
+</div></section>
+
+<section id="results" class="sec alt stage-deploy"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">DEPLOY</p><h2>Real-world results</h2></div>
+  <div class="grid g2"><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="rollout_box" data-src="static/videos/rollout_box.mp4" poster="static/images/posters/rollout_box.jpg" aria-label="rollout box" data-fixed-speed="4×"></video><span class="badge" data-badge hidden>4×</span><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Box pushing</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="rollout_tape" data-src="static/videos/rollout_tape.mp4" poster="static/images/posters/rollout_tape.jpg" aria-label="rollout tape" data-fixed-speed="4×"></video><span class="badge" data-badge hidden>4×</span><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Tape scraping</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="rollout_board" data-src="static/videos/rollout_board.mp4" poster="static/images/posters/rollout_board.jpg" aria-label="rollout board" data-fixed-speed="4×"></video><span class="badge" data-badge hidden>4×</span><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Board wiping</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="rollout_lamp" data-src="static/videos/rollout_lamp.mp4" poster="static/images/posters/rollout_lamp.jpg" aria-label="rollout lamp" data-fixed-speed="4×"></video><span class="badge" data-badge hidden>4×</span><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption>Bulb screwing</figcaption></figure></div>
+  <h3>Baseline comparison</h3>
+  <div class="chart" id="baseline-chart"></div>
+  <p class="cap">20 trials per task and method · Paper Table I</p>
+  <p class="eyebrow neutral">VISION-ONLY POLICY</p>
+  <h3>Failure cases</h3>
+  <div class="grid g4"><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="failure_box" data-src="static/videos/failure_box.mp4" poster="static/images/posters/failure_box.jpg" aria-label="failure box"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Box <span class="x">✕</span></b> Tool slips off the box face</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="failure_tape" data-src="static/videos/failure_tape.mp4" poster="static/images/posters/failure_tape.jpg" aria-label="failure tape"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Tape <span class="x">✕</span></b> Blade scrapes air above the tape</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="failure_board" data-src="static/videos/failure_board.mp4" poster="static/images/posters/failure_board.jpg" aria-label="failure board"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Board <span class="x">✕</span></b> Eraser wipes air above the board</figcaption></figure><figure class="clip"><div class="vid" style="aspect-ratio:16/9"><video muted loop playsinline preload="none" data-clip="failure_lamp" data-src="static/videos/failure_lamp.mp4" poster="static/images/posters/failure_lamp.jpg" aria-label="failure lamp"></video><button class="pp" type="button" aria-label="Pause">❚❚</button></div><figcaption class="tc"><b>Lamp <span class="x">✕</span></b> Gripper loses its grasp on the bulb</figcaption></figure></div>
+  <h3>Ablations</h3>
+  <div class="tables">
+    <div class="tbl"><table><caption>Table II · Box–Tape ablations</caption>
+      <thead><tr><th>Pre</th><th>Tac.</th><th>Wr.</th><th>Box</th><th>Tape</th><th>Avg.</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td>8/20</td><td>4/20</td><td>30.0</td></tr><tr><td></td><td>✓</td><td>✓</td><td>10/20</td><td>8/20</td><td>45.0</td></tr><tr><td>✓</td><td></td><td></td><td>14/20</td><td>8/20</td><td>55.0</td></tr><tr><td>✓</td><td></td><td>✓</td><td>16/20</td><td>12/20</td><td>70.0</td></tr><tr><td>✓</td><td>✓</td><td></td><td>17/20</td><td>13/20</td><td>75.0</td></tr><tr><td>✓</td><td>obs</td><td>obs</td><td>16/20</td><td>13/20</td><td>72.5</td></tr><tr class=best><td>✓</td><td>✓</td><td>✓</td><td>19/20</td><td>18/20</td><td>92.5</td></tr></tbody>
+    </table><p class="foot">Tac./Wr.: ✓ predicted · blank absent (neither observed nor predicted) · obs observation only</p></div>
+    <div class="tbl"><table><caption>Table III · Box–Tape training data</caption>
+      <thead><tr><th>UMI</th><th>Robot</th><th>Variant</th><th>Pre</th><th>Box</th><th>Tape</th><th>Avg.</th></tr></thead>
+      <tbody><tr><td>150</td><td>15</td><td>ContactWAM</td><td>✓</td><td>4/20</td><td>1/20</td><td>12.5</td></tr><tr><td>300</td><td>30</td><td>ContactWAM</td><td>✓</td><td>13/20</td><td>10/20</td><td>57.5</td></tr><tr class=best><td>500</td><td>50</td><td>ContactWAM (full)</td><td>✓</td><td>19/20</td><td>18/20</td><td>92.5</td></tr><tr><td>500</td><td>0</td><td>ContactWAM</td><td>✓</td><td>0/20</td><td>0/20</td><td>0.0</td></tr><tr><td>0</td><td>50</td><td>ContactWAM</td><td>✓</td><td>9/20</td><td>7/20</td><td>40.0</td></tr><tr><td>500</td><td>0</td><td>ContactWAM + DINOv3 exp.</td><td></td><td>10/20</td><td>8/20</td><td>45.0</td></tr></tbody>
+    </table></div>
+  </div>
+</div></section>
+
+<!--
+<section id="bibtex" class="sec"><div class="wrap">
+  <div class="sec-head"><h2>BibTeX</h2></div>
+  <pre class="bibtex"><code>@article{contactwam,
+  title  = {ContactWAM: From Handheld Force--Tactile Demonstrations to Contact-Predictive World Action Model},
+  author = {Anonymous Authors},
+  year   = {2026}
+}</code></pre>
+</div></section>
+-->
+
+<footer class="foot-main"><p>© 2026 ContactWAM authors</p></footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Enlarged figure"><img alt=""><button class="lb-close" type="button" aria-label="Close">✕</button></dialog>
+
+<script type="module" src="static/js/main.js"></script>
+<script type="module" src="static/js/chart.js"></script>
+<script type="module" src="static/js/gripper-viewer.js"></script>
 </body>
 </html>
