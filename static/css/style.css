@@ -21,7 +21,7 @@ body{margin:0;font-family:var(--font);font-size:var(--fs-body);line-height:var(-
  color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 button,input,select,textarea,summary{font:inherit;color:inherit}
 h1,h2,h3,h4{line-height:var(--lh-tight);font-weight:var(--fw-semi)}
-h2,h3,h4,.t-sub,.authors,figcaption,.cap,.pull,.question,.card p,.flow span,.stage-chip span,.foot{text-wrap:balance}
+h2,h3,h4,.t-sub,.authors,figcaption,.cap,.question,.flow span,.stage-chip span,.foot{text-wrap:balance}
 b,strong,th{font-weight:var(--fw-semi)}
 img,video{max-width:100%}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -55,7 +55,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 /* sections */
 .sec{padding:var(--sp-5) 0;scroll-margin-top:var(--toc-h)}
 .sec.alt{background:var(--alt)}
-.sec-head{text-align:center;margin-bottom:var(--sp-4)}
+.sec-head{text-align:center;margin-bottom:var(--sp-3)}
 .sec-head h2{font-size:var(--fs-h2);margin:0;letter-spacing:var(--ls-tight)}
 /* one label treatment: stage eyebrows (COLLECT / TRAIN / DEPLOY) and the neutral VISION-ONLY POLICY label */
 .eyebrow{font-size:var(--fs-label);font-weight:var(--fw-semi);letter-spacing:var(--ls-caps);text-transform:uppercase;line-height:var(--lh-tight);margin:0 0 var(--sp-1);color:var(--stage,var(--text))}
@@ -79,10 +79,13 @@ figcaption,.cap{font-size:var(--fs-small);text-align:center;margin:10px 0 0}
 figcaption.tc b{display:block} /* title line + description line */
 figcaption.mini{position:absolute;top:8px;left:8px;margin:0;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:var(--fs-label);font-weight:var(--fw-semi);line-height:var(--lh-tight);pointer-events:none}
 .x{color:var(--x);font-weight:var(--fw-semi)}
-/* statements share the h3 size */
-.pull,.question{font-size:var(--fs-h3);font-weight:var(--fw-semi);line-height:var(--lh-tight);text-align:center}
-.pull{margin:0 auto var(--sp-4);max-width:760px}
-.question{margin:var(--sp-4) 0 0}
+/* the closing question shares the h3 size */
+.question{font-size:var(--fs-h3);font-weight:var(--fw-semi);line-height:var(--lh-tight);text-align:center;margin:var(--sp-4) 0 0}
+/* intro paragraphs under headings ("after" = takeaway below media) and long figure captions: one 760px reading column */
+.lead,figcaption.long{max-width:760px;margin-left:auto;margin-right:auto;text-align:left;text-wrap:pretty}
+.lead{margin-top:0;margin-bottom:var(--sp-3)}
+.lead.after{margin-top:var(--sp-3);margin-bottom:0}
+figcaption.long{margin-top:12px}
 
 /* sticky tabs */
 .toc{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--rule)}
@@ -133,8 +136,8 @@ figcaption.mini{position:absolute;top:8px;left:8px;margin:0;padding:3px 10px;bor
 .card>.clip{margin-top:auto}
 .card h4,.flow b,.stage-chip b{display:block;margin:0 0 4px;font-size:var(--fs-body);font-weight:var(--fw-semi);line-height:var(--lh-tight)}
 .card p,.flow span,.stage-chip span{display:block;font-size:var(--fs-small)}
-.card p{margin:0 0 var(--sp-2)}
-.flow{list-style:none;padding:0;margin:var(--sp-4) 0 0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:f}
+.card p{margin:0 0 var(--sp-2);text-wrap:pretty}
+.flow{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:f}
 .flow li{counter-increment:f;padding:var(--sp-2);border-radius:12px;position:relative;border:1px solid var(--rule);background:#fff}
 .flow li::before{content:counter(f);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--stage);color:#fff;font-size:var(--fs-label);font-weight:var(--fw-semi);font-variant-numeric:tabular-nums;margin-bottom:10px}
 .chips{margin-bottom:var(--sp-3)}
@@ -158,8 +161,7 @@ figcaption.mini{position:absolute;top:8px;left:8px;margin:0;padding:3px 10px;bor
 .chart .hit{cursor:default}.chart .hit:focus-visible{outline:2px solid var(--text)}
 
 /* tables */
-.tables{display:grid;grid-template-columns:1fr 1.6fr;gap:40px;align-items:start}
-.tbl{overflow-x:auto}
+.tbl{overflow-x:auto;max-width:760px;margin:0 auto}
 table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:var(--lh-tight);font-variant-numeric:tabular-nums}
 caption{font-size:var(--fs-body);font-weight:var(--fw-semi);text-align:left;margin-bottom:var(--sp-1)}
 th,td{padding:9px 10px;text-align:center;border-bottom:1px solid var(--rule)}
@@ -179,7 +181,7 @@ tr.best td{font-weight:var(--fw-semi);background:color-mix(in srgb,var(--deploy)
 
 @media (max-width:760px){
  .g4{grid-template-columns:1fr 1fr}
- .g2,.g3,.split,.tables,.io{grid-template-columns:1fr}
+ .g2,.g3,.split,.io{grid-template-columns:1fr}
  .split-wall .vid{flex:none;aspect-ratio:1320/1080}
  .portrait{grid-template-columns:repeat(3,1fr);gap:8px}
  .flow{grid-template-columns:1fr}
